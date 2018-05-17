@@ -64,7 +64,8 @@ public class TourDatabaseDao implements TourDao {
 				String description = rs.getString("tour_description");
 				int price = rs.getInt("tour_price");
 				Date date = rs.getDate("tour_date");
-				Tour tour = new Tour(id, name, description, price, date);
+				String countries = rs.getString("tour_countries");
+				Tour tour = new Tour(id, name, description, price, date, countries);
 				tours.add(tour);
 			}
 			rs.close();
@@ -101,7 +102,8 @@ public class TourDatabaseDao implements TourDao {
 				String description = rs.getString("tour_description");
 				int price = rs.getInt("tour_price");
 				Date date = rs.getDate("tour_date");
-				result = new Tour(id, name, description, price, date);
+				String countries = rs.getString("tour_countries");
+				result = new Tour(id, name, description, price, date, countries);
 				rs.close();
 				statement.close();
 			}
@@ -248,7 +250,8 @@ public class TourDatabaseDao implements TourDao {
 				String description = rs.getString("tour_description");
 				int price = rs.getInt("tour_price");
 				Date date = rs.getDate("tour_date");
-				tours.add(new Tour(id, name, description, price, date));
+				String countries = rs.getString("tour_countries");
+				tours.add(new Tour(id, name, description, price, date, countries));
 			}
 			rs.close();
 			statement.close();
@@ -281,7 +284,8 @@ public class TourDatabaseDao implements TourDao {
 				String description = rs.getString("tour_description");
 				int price = rs.getInt("tour_price");
 				Date date = rs.getDate("tour_date");
-				tours.add(new Tour(id, name, description, price, date));
+				String countries = rs.getString("tour_countries");
+				tours.add(new Tour(id, name, description, price, date, countries));
 			}
 			rs.close();
 			statement.close();
@@ -316,7 +320,8 @@ public class TourDatabaseDao implements TourDao {
 				String description = rs.getString("tour_description");
 				int price = rs.getInt("tour_price");
 				Date date = rs.getDate("tour_date");
-				tours.add(new Tour(id, name, description, price, date));
+				String countries = rs.getString("tour_countries");
+				tours.add(new Tour(id, name, description, price, date, countries));
 			}
 			rs.close();
 			statement.close();

@@ -12,7 +12,7 @@
         <h2>
         	<a href="new">Add New Tour</a>
         	&nbsp;&nbsp;&nbsp;
-        	<a href="list">List All Tours</a>
+        	<a href="tours">List All Tours</a>
         </h2>
         <div align="center">
         <table border="1" cellpadding="5">
@@ -37,7 +37,7 @@
                     <td>
                     	<a href="edit?id=<c:out value='${tour.id}' />">Edit</a>
                     	&nbsp;&nbsp;&nbsp;&nbsp;
-                    	<a href="delete?id=<c:out value='${tour.id}' />">Delete</a>                    	
+                    	<a href="remove?id=<c:out value='${tour.id}' />">Delete</a>                    	
                     </td>
                 </tr>
             </c:forEach>
