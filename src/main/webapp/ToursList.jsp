@@ -7,13 +7,17 @@
 <title>Travel-joy Tours</title>
 </head>
 <body>
+<form action="TourControllerServlet" method="post">
 	<center>
 		<h1>All available tours</h1>
         <h2>
-        	<a href="new">Add New Tour</a>
+        	<a href="TourForm.jsp">Add New Tour</a>
         	&nbsp;&nbsp;&nbsp;
-        	<a href="tours">List All Tours</a>
+        	<a href="TourControllerServlet">List All Tours</a>
+        	
+        	
         </h2>
+        </center>
         <div align="center">
         <table border="1" cellpadding="5">
             <caption><h2>List of Tours</h2></caption>
@@ -26,6 +30,7 @@
                 <th>Countries</th>
           
             </tr>
+
             <c:forEach var="tour" items="${tours}">
                 <tr>
                     <td><c:out value="${tour.id}" /></td>
@@ -37,12 +42,12 @@
                     <td>
                     	<a href="edit?id=<c:out value='${tour.id}' />">Edit</a>
                     	&nbsp;&nbsp;&nbsp;&nbsp;
-                    	<a href="remove?id=<c:out value='${tour.id}' />">Delete</a>                    	
+                    	<a href="remove?id<c:out value='${tour.id}' />">Delete</a>                    	
                     </td>
                 </tr>
             </c:forEach>
         </table>
     </div>	
-	</center>
+</form>
 </body>
 </html>

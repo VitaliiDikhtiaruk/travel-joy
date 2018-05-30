@@ -10,8 +10,8 @@
 	<table style="with: 50%">
 		<tr>
 			<td>
-				<%--<% String login = request.getParametr("login"); --%> 
-				<a> Welcome <% out.println("login"); %> ! You have logged in</a>
+				
+				<a> Welcome ${user.getName()} ! You have logged in</a>
 			</td>
 		</tr>
 		<tr></tr><tr><td></td><td></td><td><a href="LoginWelcome.jsp"><b>Logout</b></a></td></tr>

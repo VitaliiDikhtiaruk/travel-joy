@@ -7,6 +7,11 @@
 <title>Log in</title>
 </head>
 <body>
+<form action="Login" method="post">
+	<tr>
+			</td>
+			<td></td>
+		</tr>
 	<center>
 		<h1>Log in Form</h1>
 		<form action="login" method="post">
@@ -20,7 +25,8 @@
 					<td><input type="password" name="password" /></td>
 				</tr>
 			</table>
-			<input type="submit" value="Log in" />
+			<input type="submit" name="submit" value="login" />
+				<td><a href="RegistrationForm.jsp">Registration</a></td>
 		</form>
 	</center>
 </body>

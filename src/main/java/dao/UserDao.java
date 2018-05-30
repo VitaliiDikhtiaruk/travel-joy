@@ -11,6 +11,7 @@ import model.User;
 
 public interface UserDao extends AbstractDao<User> {
 	public User getByLogin(String login)  throws SQLException ;
+	public User getUser(String login, String password);
 	
 	public User getUserByEmail(String email)  throws SQLException ;
 

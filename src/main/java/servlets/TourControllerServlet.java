@@ -17,24 +17,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.impl.TourDatabaseDao;
+import dao.impl.UserDatabaseDao;
 import model.Tour;
 
 /**
  * Servlet implementation class TourControllerServlet
  */
-@WebServlet("TourControllerServlet")
+@WebServlet("/TourControllerServlet")
 public class TourControllerServlet extends HttpServlet {
 	private static Logger log = Logger.getLogger(TourControllerServlet.class.getName());
 	private static final long serialVersionUID = 1L;
-		public TourDatabaseDao tourDatabaseDao;
+		public TourDatabaseDao tourDatabaseDao = new TourDatabaseDao();;
        
-       public void init() {
-	    String jdbcURL = getServletContext().getInitParameter("jdbc:mysql://localhost:3306/travel_agency");
-		String jdbcUsername = getServletContext().getInitParameter("root");
-		String jdbcPassword = getServletContext().getInitParameter("root");
-		
-		tourDatabaseDao = new TourDatabaseDao(jdbcURL, jdbcUsername, jdbcPassword);
-   }
+//       public void init() {
+//	    String jdbcURL = getServletContext().getInitParameter("jdbc:mysql://localhost:3306/travel_agency?useLegacyDatetimeCode=false&serverTimezone=Australia/Sydney&useSSL=false");
+//		String jdbcUsername = getServletContext().getInitParameter("root");
+//		String jdbcPassword = getServletContext().getInitParameter("root");
+//		
+//		tourDatabaseDao = new TourDatabaseDao(jdbcURL, jdbcUsername, jdbcPassword);
+//   }
        /**
    	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
    	 */
@@ -48,35 +49,50 @@ public class TourControllerServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String action = request.getServletPath();
-			try {
-				switch(action) {
-				case"/new":
-					showNewForm(request, response);
-					break;
-				case"/insert":
-					insertTour(request, response);
-					break;
-				case"/remove":
-					removeTour(request, response);
-					break;
-				case"/update":
-					updateTour(request, response);
-					break;
-				case"/edit":
-					showEditForm(request, response);
-					break;
-				default:
-					listTours(request, response);
-					break;
-				}
-			} catch(SQLException e) {
-				log.warning("doGet action problem");
-				throw new ServletException();
-			} catch (ParseException e) {
-				log.warning("can't parse sql date from date");
-				throw new ServletException();
-			}
+//		try {
+//			System.out.println("into try get list");
+//			listTours(request, response);
+//		} catch (SQLException e) {
+//			System.out.println("can't get list " + e);
+//		}
+//		
+		
+		try {
+			listTours(request, response);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+//		String action = request.getParameter("submit");
+//			try {
+//				switch(action) {
+//				case"new":
+//					showNewForm(request, response);
+//					break;
+//				case"insert":
+//					insertTour(request, response);
+//					break;
+//				case"remove":
+//					removeTour(request, response);
+//					break;
+//				case"update":
+//					updateTour(request, response);
+//					break;
+//				case"edit":
+//					showEditForm(request, response);
+//					break;
+//				default:
+//					listTours(request, response);
+//					break;
+//				}
+//			} catch(SQLException e) {
+//				log.warning("doGet action problem");
+//				throw new ServletException();
+//			} catch (ParseException e) {
+//				log.warning("can't parse sql date from date");
+//				throw new ServletException();
+//			}
 	}
 
 	private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
@@ -105,7 +121,7 @@ public class TourControllerServlet extends HttpServlet {
 		Long id = Long.parseLong(request.getParameter("id"));
 		Tour tour = new Tour(id);
 		tourDatabaseDao.remove(tour);
-		response.sendRedirect("tours");
+		response.sendRedirect("ToursList.jsp");
 		
 	}
 	private void insertTour(HttpServletRequest request, HttpServletResponse response) throws ParseException, SQLException, IOException {
@@ -127,9 +143,11 @@ public class TourControllerServlet extends HttpServlet {
 		
 	}
 	protected void listTours(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
-		List<Tour> listTours = tourDatabaseDao.getAll();
-		request.setAttribute("tours", listTours);
+		List<Tour> tours = tourDatabaseDao.getAll();
+		System.out.println("into listtours method");
+		request.setAttribute("tours", tours);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("ToursList.jsp");
 		dispatcher.forward(request, response);
 	}
+	
 }

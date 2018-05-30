@@ -24,8 +24,26 @@ public class User extends Model {
 
 	private List<Role> roles;
 	
-	public User(Long id, String name, String lastName, int age, String email, Date dob, String login, String password, String role) {
+	public User(Long id, String name, String lastName, Date dob, String email, String login, String password, String role) {
 		this.id = id;
+		this.name = name;
+		this.lastName = lastName;
+		this.email = email;
+		this.dob = dob;
+		this.login = login;
+		this.password = password;
+		this.role = role;
+		
+	}
+	public User(String login, String password) {
+	
+		this.login = login;
+		this.password = password;
+		
+		
+	}
+	public User(String name, String lastName, int age, String email, Date dob, String login, String password, String role) {
+
 		this.name = name;
 		this.lastName = lastName;
 		this.age = age;
@@ -36,6 +54,10 @@ public class User extends Model {
 		this.role = role;
 		
 	}
+	public User() {
+		
+	}
+
 	public String getRole() {
 		return role;
 	}

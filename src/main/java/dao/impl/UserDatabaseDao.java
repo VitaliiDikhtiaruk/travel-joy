@@ -19,23 +19,26 @@ import model.User;
 
 public class UserDatabaseDao implements UserDao {
 
-	private String jdbcURL = "jdbc:mysql://localhost:3306/travel_agency";
+	private String jdbcURL = "jdbc:mysql://localhost:3306/travel_agency?useLegacyDatetimeCode=false&serverTimezone=Australia/Sydney&useSSL=false";
 	private String jdbcUsername = "root";
 	private String jdbcPassword = "root";
 	private Connection connection;
 
 	private static Logger log = Logger.getLogger(UserDatabaseDao.class.getName());
 
+
 	public UserDatabaseDao(String jdbcURL, String jdbcUsername, String jdbcPassword) {
 		this.jdbcURL = jdbcURL;
 		this.jdbcUsername = jdbcUsername;
 		this.jdbcPassword = jdbcPassword;
 	}
-
+	public UserDatabaseDao() {
+		
+	}
 	protected void connect() throws SQLException {
 		if (connection == null || connection.isClosed()) {
 			try {
-				Class.forName("com.mysql.jdbc.Driver");
+				Class.forName("com.mysql.cj.jdbc.Driver");
 			} catch (ClassNotFoundException e) {
 				log.warning("can't access to the database");
 				throw new SQLException(e);
@@ -66,13 +69,12 @@ public class UserDatabaseDao implements UserDao {
 				Long id = rs.getLong("user_id");
 				String name = rs.getString("user_name");
 				String lastName = rs.getString("user_LastName");
-				int age = rs.getInt("user_age");
 				String email = rs.getString("user_email");
 				Date dob = rs.getDate("user_dateOfBirth");
 				String login = rs.getString("user_login");
 				String password = rs.getString("user_password");
 				String role = rs.getString("user_role");
-				User user = new User(id, name, lastName, age, email, dob, login, password, role);
+				User user = new User(id, name, lastName, dob, email, login, password, role);
 				users.add(user);
 			}
 			rs.close();
@@ -107,13 +109,12 @@ public class UserDatabaseDao implements UserDao {
 			if (rs.next()) {
 				String name = rs.getString("user_name");
 				String lastName = rs.getString("user_lastName");
-				int age = rs.getInt("user_age");
 				String email = rs.getString("user_email");
 				Date dob = rs.getDate("user_dateOfBirth");
 				String login = rs.getString("user_login");
 				String password = rs.getString("user_password");
-				String role = rs.getString("user_role");
-				result = new User(id, name, lastName, age, email, dob, login, password, role);
+				String role = rs.getString("users_role");
+				result = new User(id, name, lastName, dob, email, login, password, role);
 				rs.close();
 				statement.close();
 			}
@@ -137,20 +138,20 @@ public class UserDatabaseDao implements UserDao {
 	 */
 	@Override
 	public void add(User user) throws SQLException {
-		log.info("adding user " + user.getName());
+//		log.info("adding user " + user.getName());
 		connect();
 
-		try (PreparedStatement statement = connection.prepareStatement(UserDatabaseMySQL.ADD.QUERY)) {
+		try {
+			PreparedStatement statement = connection.prepareStatement("INSERT INTO users(user_id, user_name, user_lastName, user_dateOfBirth, user_email, user_login, user_password, users_role) VALUES (DEFAULT, (?), (?), (?), (?), (?), (?), (?))");
 			statement.setString(1, user.getName());
 			statement.setString(2, user.getLastName());
-			statement.setInt(3, user.getAge());
+			statement.setDate(3, user.getDob());
 			statement.setString(4, user.getEmail());
-			statement.setDate(5, user.getDob());
-			statement.setString(6, user.getLogin());
-			statement.setString(7, user.getPassword());
-			statement.setString(8, user.getRole());
+			statement.setString(5, user.getLogin());
+			statement.setString(6, user.getPassword());
+			statement.setString(7, user.getRole());
 			statement.executeUpdate();
-			statement.close();
+
 		} catch (SQLException e) {
 			log.warning("can't create new user" + user.getName());
 		} finally {
@@ -176,7 +177,6 @@ public class UserDatabaseDao implements UserDao {
 		try (PreparedStatement statement = connection.prepareStatement(UserDatabaseMySQL.UPDATE.QUERY)) {
 			statement.setString(1, user.getName());
 			statement.setString(2, user.getLastName());
-			statement.setInt(3, user.getAge());
 			statement.setString(4, user.getEmail());
 			statement.setDate(5, user.getDob());
 			statement.setString(6, user.getLogin());
@@ -240,13 +240,12 @@ public class UserDatabaseDao implements UserDao {
 				Long id = rs.getLong("user_id");
 				String name = rs.getString("user_name");
 				String lastName = rs.getString("user_lastName");
-				int age = rs.getInt("user_age");
 				String email = rs.getString("user_email");
 				Date dob = rs.getDate("user_dateOfBirth");
 				String login = rs.getString("user_login");
 				String password = rs.getString("user_password");
-				String role = rs.getString("user_role");
-				result = new User(id, name, lastName, age, email, dob, login, password, role);
+				String role = rs.getString("users_role");
+				result = new User(id, name, lastName, dob, email, login, password, role);
 				rs.close();
 				statement.close();
 			}
@@ -282,13 +281,12 @@ public class UserDatabaseDao implements UserDao {
 				Long id = rs.getLong("user_id");
 				String name = rs.getString("user_name");
 				String lastName = rs.getString("user_LastName");
-				int age = rs.getInt("user_age");
 				String email = rs.getString("user_email");
 				Date dob = rs.getDate("user_dateOfBirth");
 				String login = rs.getString("user_login");
 				String password = rs.getString("user_password");
-				String role = rs.getString("user_role");
-				User user = new User(id, name, lastName, age, email, dob, login, password, role);
+				String role = rs.getString("users_role");
+				User user = new User(id, name, lastName, dob, email, login, password, role);
 				users.add(user);
 			}
 		} catch (SQLException e) {
@@ -324,13 +322,12 @@ public class UserDatabaseDao implements UserDao {
 				Long id = rs.getLong("user_id");
 				String name = rs.getString("user_name");
 				String lastName = rs.getString("user_LastName");
-				int age = rs.getInt("user_age");
 				String email = rs.getString("user_email");
 				Date dob = rs.getDate("user_dateOfBirth");
 				String login = rs.getString("user_login");
 				String password = rs.getString("user_password");
-				String role = rs.getString("user_role");
-				User user = new User(id, name, lastName, age, email, dob, login, password, role);
+				String role = rs.getString("users_role");
+				User user = new User(id, name, lastName, dob, email, login, password, role);
 				users.add(user);
 			}
 		} catch (SQLException e) {
@@ -364,13 +361,13 @@ public class UserDatabaseDao implements UserDao {
 				Long id = rs.getLong("user_id");
 				String name = rs.getString("user_name");
 				String lastName = rs.getString("user_lastName");
-				int age = rs.getInt("user_age");
+
 				String email = rs.getString("user_email");
 				Date dob = rs.getDate("user_dateOfBirth");
 				String login = rs.getString("user_login");
 				String password = rs.getString("user_password");
-				String role = rs.getString("user_role");
-				result = new User(id, name, lastName, age, email, dob, login, password, role);
+				String role = rs.getString("users_role");
+				result = new User(id, name, lastName, dob, email, login, password, role);
 				rs.close();
 				statement.close();
 			}
@@ -407,13 +404,12 @@ public class UserDatabaseDao implements UserDao {
 					Long id = rs.getLong("user_id");
 					String name = rs.getString("user_name");
 					String lastName = rs.getString("user_LastName");
-					int age = rs.getInt("user_age");
 					String email = rs.getString("user_email");
 					Date dob = rs.getDate("user_dateOfBirth");
 					String login = rs.getString("user_login");
 					String password = rs.getString("user_password");
-					String role = rs.getString("user_role");
-					User user = new User(id, name, lastName, age, email, dob, login, password, role);
+					String role = rs.getString("users_role");
+					User user = new User(id, name, lastName, dob, email, login, password, role);
 					users.add(user);
 				}
 			} catch (SQLException e) {
@@ -435,14 +431,53 @@ public class UserDatabaseDao implements UserDao {
 		REMOVE("DELETE FROM users  WHERE user_id = (?)"), 
 		UPDATE("UPDATE users SET user_name = (?), user_lastName = (?), user_age = (?), user_email = (?), user_dateOfBirth = (?), user_login = (?), user_password = (?),"
 						+ "user_role = (?), WHERE user_id = (?)"), 
-		ADD("INSERT INTO users (user_id, user_name, user_lastName, user_age, user_email, user_dateOfBirth, user_login, user_password, user_role) "
-										+ "VALUES (DEFAULT, (?), (?), (?), (?), (?), (?), (?), (?)");
+		ADD("INSERT INTO users(user_id, user_name, user_lastName, user_dateOfBirth, user_email, user_login, user_password, users_role) VALUES (DEFAULT, (?), (?), (?), (?), (?), (?), (?))");
 
 		String QUERY;
 
 		UserDatabaseMySQL(String QUERY) {
 			this.QUERY = QUERY;
 		}
+	}
+
+
+	@Override
+	public User getUser(String userLogin, String userPassword){
+		User result = null;
+		try {
+			connect();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM users WHERE user_login = (?) AND user_password = (?)")) {
+			statement.setString(1, userLogin);
+			statement.setString(2, userPassword);
+			ResultSet rs = statement.executeQuery();
+			if (rs.next()) {
+				Long id = rs.getLong("user_id");
+				String name = rs.getString("user_name");
+				String lastName = rs.getString("user_lastName");
+				Date dob = rs.getDate("user_dateOfBirth");
+				String email = rs.getString("user_email");
+				String login = rs.getString("user_login");
+				String password = rs.getString("user_password");
+				String role = rs.getString("users_role");
+				result = new User(id, name, lastName, dob, email, login, password, role);
+				rs.close();
+				statement.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			log.warning("no such login " + userLogin);
+		} finally {
+			try {
+				disconnect();
+			} catch (SQLException e) {
+				log.warning("can't close connection");
+			}
+		}
+		return result;
 	}
 
 }

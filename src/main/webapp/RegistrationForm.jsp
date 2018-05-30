@@ -10,7 +10,7 @@
 	<center>
 
 		<h1>Registration form</h1>
-		<form action="registrater" method="post">
+		<form action="LoginRegister" method="post">
 			<table style="with: 50%">
 				<tr>
 					<td>First Name</td>
@@ -18,7 +18,7 @@
 				</tr>
 				<tr>
 					<td>Last Name</td>
-					<td><input type="text" name="lastName" /></td>
+					<td><input type="text" name="lastname" /></td>
 				</tr>
 				<tr>
 					<td>Email</td>
@@ -26,26 +26,42 @@
 				</tr>
 				<tr>
 					<td>Date of Birth</td>
+					<!-- 	<td>
+			<fmt:formatDate var="dob" value="dob" pattern="yyyymmdd"/>
+			<input type="text" name="dob" />
+			</td>
+			 -->
 					<td><input type="date" name="dob" /></td>
+
 				</tr>
 				<tr>
 					<td>Login</td>
 					<td><input type="text" name="login" /></td>
 				</tr>
 				<tr>
+
 					<td>Password</td>
-					<td><input type="password" name="password" /></td>
+
+					<td>
+					<!-- <input
+						title="Password must contain at least 8 characters, including UPPER/lowercase and numbers"
+						type="password" required
+						pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="password" />
+						-->
+<input id="password" name="password" type="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Password must contain at least 8 characters, including UPPER/lowercase and numbers' : ''); if(this.checkValidity()) form.password_two.pattern = this.value;" placeholder="Password" required>
+</td>
 				</tr>
 				<tr>
 					<td>Confirm Password</td>
-					<td><input type="password" name="password2" /></td>
+					<td>
+<input id="password_two" name="password2" type="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" onchange="this.setCustomValidity(this.validity.patternMismatch ? 'Please enter the same Password as above' : '');" placeholder="Verify Password" required>
+					</td>
+					
 				</tr>
-
-
 			</table>
-		</form>
+			<input type="submit" name="submit" value="register" />
 
-		<input type="submit" value="Submit" />
+		</form>
 	</center>
 </body>
 </html>

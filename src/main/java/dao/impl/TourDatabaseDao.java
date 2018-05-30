@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +16,10 @@ import dao.impl.CountryDatabaseDao.CountryDatabaseMySQL;
 import model.Tour;
 
 public class TourDatabaseDao implements TourDao {
+	
+	
 
-	private String jdbcURL = "jdbc:mysql://localhost:3306/travel_agency";
+	private String jdbcURL = "jdbc:mysql://localhost:3306/travel_agency?useLegacyDatetimeCode=false&serverTimezone=Australia/Sydney&useSSL=false";
 	private String jdbcUsername = "root";
 	private String jdbcPassword = "root";
 	private Connection connection;
@@ -28,11 +31,14 @@ public class TourDatabaseDao implements TourDao {
 		this.jdbcUsername = jdbcUsername;
 		this.jdbcPassword = jdbcPassword;
 	}
+public TourDatabaseDao() {
+		
+	}
 
 	protected void connect() throws SQLException {
 		if (connection == null || connection.isClosed()) {
 			try {
-				Class.forName("com.mysql.jdbc.Driver");
+				Class.forName("com.mysql.cj.jdbc.Driver");
 			} catch (ClassNotFoundException e) {
 				log.warning("can't access to the database");
 				throw new SQLException(e);
@@ -54,10 +60,11 @@ public class TourDatabaseDao implements TourDao {
 	@Override
 	public List<Tour> getAll() throws SQLException {
 		log.info("getting list of all countries");
-		List<Tour> tours = new ArrayList<>();
 		connect();
-		try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM tours")) {
-			ResultSet rs = statement.executeQuery();
+		List<Tour> tours = new ArrayList<>();
+		
+		try (Statement statement = connection.createStatement()) {
+			ResultSet rs = statement.executeQuery("SELECT * FROM tours");
 			while (rs.next()) {
 				Long id = rs.getLong("tour_id");
 				String name = rs.getString("tour_name");
@@ -349,6 +356,7 @@ public class TourDatabaseDao implements TourDao {
 		TourDatabaseMySQL(String QUERY) {
 			this.QUERY = QUERY;
 		}
+		
 	}
 
 }

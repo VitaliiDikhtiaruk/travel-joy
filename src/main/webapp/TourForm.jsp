@@ -7,20 +7,24 @@
 <title>Adding new tour</title>
 </head>
 <body>
+<form action="LoginRegister" method="post">
 	<center>
+	
 		<h1>Tours Management</h1>
         <h2>
-        	<a href="new">Add New Tour</a>
+        	
+        	<a href="TourForm.jsp">Add New Tour</a>
         	&nbsp;&nbsp;&nbsp;
-        	<a href="list">List All Tours</a>
+        	
+        	<a href="ToursList.jsp">List All Tours</a>
         	
         </h2>
 	</center>
     <div align="center">
-		<c:if test="${book != null}">
+		<c:if test="${tour != null}">
 			<form action="update" method="post">
         </c:if>
-        <c:if test="${book == null}">
+        <c:if test="${tour == null}">
 			<form action="insert" method="post">
         </c:if>
         <table border="1" cellpadding="5">
@@ -79,7 +83,7 @@
             </tr>
             <tr>
             	<td colspan="2" align="center">
-            		<input type="submit" value="Save" />
+            		<input type="submit" value="Save" name="add"/>
             	</td>
             </tr>
         </table>
